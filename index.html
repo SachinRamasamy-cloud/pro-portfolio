@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sachin - Portfolio</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fontawsome cdn -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <!-- font -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: "#F5F1E8",
+          surface: "#EAE4D8",
+          "surface-elevated": "#FFFFFF",
+
+          text: {
+            primary: "#1A1A1A",
+            secondary: "#5C5C5C",
+            muted: "#8A8A8A",
+            inverse: "#F5F1E8",
+          },
+
+          border: "#D6CFC2",
+
+          accent: {
+            DEFAULT: "#8B6F47",
+            hover: "#7A5F3D",
+            active: "#6A5234",
+            soft: "#C2A57A",
+          },
+        },
+
+        fontFamily: {
+          display: ["Cormorant", "serif"],
+          body: ["Geist", "system-ui", "sans-serif"],
+          mono: ["Geist Mono", "monospace"],
+        },
+      }
+    }
+  }
+</script>
+
+</html>
