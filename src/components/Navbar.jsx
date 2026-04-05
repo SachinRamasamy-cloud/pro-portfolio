@@ -1,138 +1,110 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useMemo, useState } from 'react'
+import { motion as Motion } from 'framer-motion'
+
+const LINKS = [
+  { label: 'Home', href: '#top', section: 'top' },
+  { label: 'Projects', href: '#projects', section: 'projects' },
+  { label: 'Experience', href: '#experience', section: 'experience' },
+  { label: 'Skills', href: '#skills', section: 'skills' },
+  { label: 'About', href: '#about', section: 'about' },
+  { label: 'Contact', href: '#contact', section: 'contact' },
+]
 
 export default function Navbar() {
-    const navLinks = ['Projects', 'Experience', 'Skills', 'About', 'Contact'];
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('top')
+  const [progress, setProgress] = useState(0)
+  const sections = useMemo(() => LINKS.map((item) => item.section), [])
 
-    const navContainerVariants = {
-        hidden: { y: -25, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                delay: 0.2,
-                ease: 'easeOut',
-                when: 'beforeChildren',
-                staggerChildren: 0.08,
-            },
-        },
-    };
+  useEffect(() => {
+    const onScroll = () => {
+      const pageHeight = document.documentElement.scrollHeight - window.innerHeight
+      const nextProgress = pageHeight > 0 ? (window.scrollY / pageHeight) * 100 : 0
+      setProgress(nextProgress)
 
-    const navItemVariants = {
-        hidden: { y: -10, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { type: 'spring', stiffness: 120, damping: 12 },
-        },
-    };
-
-    // Variants for the mobile dropdown container
-    const mobileMenuVariants = {
-        hidden: { opacity: 0, y: -10 },
-        visible: { 
-            opacity: 1, 
-            y: 0,
-            transition: { 
-                duration: 0.3, 
-                ease: 'easeOut',
-                when: 'beforeChildren',
-                staggerChildren: 0.05
-            }
-        },
-        exit: { 
-            opacity: 0,
-            y: -10,
-            transition: { duration: 0.2, ease: 'easeIn' }
+      let current = 'top'
+      sections.forEach((id) => {
+        const element = document.getElementById(id)
+        if (element && window.scrollY >= element.offsetTop - 140) {
+          current = id
         }
-    };
+      })
+      setActive(current)
+    }
 
-    const [open, setOpen] = useState(false);
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [sections])
 
+  return (
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-bg/85 backdrop-blur-md">
+      <div className="h-[2px] w-full bg-transparent">
+        <Motion.div
+          className="h-full bg-gradient-to-r from-accent to-[#b38b56]"
+          animate={{ width: `${progress}%` }}
+          transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+        />
+      </div>
 
-    return (
-        <motion.nav
-            className="bg-surface border-b sticky top-0 border-border px-6 py-4 flex justify-between items-center relative z-50"
-            variants={navContainerVariants}
-            initial="hidden"
-            animate="visible"
-        >
-            <div className="flex items-center gap-8">
-                <motion.div
-                    className="text-text-primary font-display text-2xl font-bold tracking-wide"
-                    variants={navItemVariants}
-                >
-                    Sachin
-                </motion.div>
-                <div className="hidden md:flex text-text-secondary font-body items-center gap-6">
-                    {navLinks.map(link => (
-                        <motion.div
-                            key={link}
-                            className="hover:text-text-primary cursor-pointer"
-                            variants={navItemVariants}
-                            whileHover={{ y: -2, transition: { type: 'spring', stiffness: 300 } }}
-                        >
-                            {link}
-                        </motion.div>
-                    ))}
-                </div>
-            </div>
-            <motion.button
-                className="hidden md:flex bg-accent text-text-inverse font-body px-4 py-2 rounded"
-                variants={navItemVariants}
-                whileHover={{ scale: 1.05, backgroundColor: '#7A5F3D' /* accent-hover */ }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 md:px-8">
+        <a href="#top" className="font-display text-3xl text-text-primary">
+          Sachin
+        </a>
+
+        <div className="hidden md:flex items-center gap-2">
+          {LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className={`nav-pill ${active === link.section ? 'nav-pill-active' : ''}`}
             >
-                Resume
-            </motion.button>
+              {link.label}
+            </a>
+          ))}
+          <a className="btn-primary ml-2" href="#contact">
+            Let&apos;s Talk
+          </a>
+        </div>
 
-            {/* Mobile Toggle Button */}
-            <div className="md:hidden flex items-center">
-                <motion.div
-                    className="cursor-pointer text-text-primary p-2"
-                    onClick={() => setOpen(!open)}
-                    whileTap={{ scale: 0.9 }}
-                >
-                    {open ?
-                    <i className="fa-solid fa-xmark text-xl"></i>
-                    :
-                    <i className="fa-solid fa-bars text-xl"></i>
-                    }
-                </motion.div>
-            </div>
+        <button
+          type="button"
+          className="md:hidden rounded-md border border-border px-3 py-2 text-text-primary"
+          onClick={() => setOpen((prev) => !prev)}
+          aria-label="Toggle menu"
+          aria-expanded={open}
+        >
+          {open ? 'Close' : 'Menu'}
+        </button>
+      </nav>
 
-            {/* Mobile Menu Dropdown */}
-            <AnimatePresence>
-                {open && (
-                    <motion.div
-                        className="absolute top-full left-0 w-full bg-surface border-b border-border shadow-sm flex flex-col px-6 py-6 gap-6 md:hidden"
-                        variants={mobileMenuVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                    >
-                        {navLinks.map(link => (
-                            <motion.div
-                                key={link}
-                                className="text-text-secondary font-body hover:text-text-primary cursor-pointer text-lg"
-                                variants={navItemVariants}
-                                onClick={() => setOpen(false)} // Close menu when a link is clicked
-                            >
-                                {link}
-                            </motion.div>
-                        ))}
-                        <motion.button
-                            className="bg-accent text-text-inverse font-body px-4 py-3 rounded mt-2 w-full text-center"
-                            variants={navItemVariants}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            Resume
-                        </motion.button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.nav>
-    )
+      {open && (
+        <Motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          className="border-t border-border bg-surface px-6 py-5 md:hidden"
+        >
+          <div className="flex flex-col gap-4">
+            {LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={`text-text-secondary transition-colors hover:text-text-primary ${
+                  active === link.section ? 'text-accent' : ''
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
+            <a href="#contact" className="btn-primary mt-2 text-center" onClick={() => setOpen(false)}>
+              Let&apos;s Talk
+            </a>
+          </div>
+        </Motion.div>
+      )}
+    </header>
+  )
 }
+

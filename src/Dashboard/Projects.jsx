@@ -1,150 +1,297 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { useMemo, useState } from 'react'
+import { AnimatePresence, motion as Motion } from 'framer-motion'
 
-export default function Projects() {
-  // Dummy data - replace with your actual projects
-  const projects = [
-    {
-      id: 1,
-      title: "E-Commerce Platform",
-      description: "A full-stack e-commerce solution with real-time inventory management, secure payment processing, and an intuitive admin dashboard.",
-      tech: ["React", "Node.js", "MongoDB", "Stripe"],
-      github: "#",
-      live: "#",
-      image: "https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=1000&auto=format&fit=crop"
-    },
-    {
-      id: 2,
-      title: "Task Management App",
-      description: "A collaborative project management tool featuring Kanban boards, team assignments, and automated progress tracking.",
-      tech: ["TypeScript", "Express", "PostgreSQL", "Socket.io"],
-      github: "#",
-      live: "#",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop"
-    },
-    {
-      id: 3,
-      title: "AI Content Generator",
-      description: "A SaaS application leveraging OpenAI's API to generate marketing copy, blog posts, and social media content seamlessly.",
-      tech: ["Next.js", "Tailwind", "OpenAI", "Prisma"],
-      github: "#",
-      live: "#",
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000&auto=format&fit=crop"
-    }
-  ];
+const PROJECTS = [
+  {
+    id: 1,
+    title: 'Job Portal Platform',
+    year: 2026,
+    featured: true,
+    category: 'MERN',
+    summary: 'Role-based job portal with recruiter and candidate workflows.',
+    details:
+      'Implemented authentication flow, profile management, and filtered job listings with pagination.',
+    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind'],
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop',
+    repo: '#repo-placeholder',
+    live: '#live-placeholder',
+  },
+  {
+    id: 2,
+    title: 'Learning Management UI',
+    year: 2026,
+    featured: true,
+    category: 'Frontend',
+    summary: 'Dashboard-style learning interface with progress tracking.',
+    details:
+      'Built reusable components, responsive layout system, and state-based learning progress cards.',
+    stack: ['React', 'JavaScript', 'Tailwind', 'MUI'],
+    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200&auto=format&fit=crop',
+    repo: '#repo-placeholder',
+    live: '#live-placeholder',
+  },
+  {
+    id: 3,
+    title: 'E-Commerce Storefront',
+    year: 2025,
+    featured: true,
+    category: 'MERN',
+    summary: 'Product browsing and cart flow with clean user journeys.',
+    details:
+      'Created product listing UI, category filters, cart state handling, and checkout page interactions.',
+    stack: ['React', 'Node.js', 'MongoDB', 'Bootstrap'],
+    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=1200&auto=format&fit=crop',
+    repo: '#repo-placeholder',
+    live: '#live-placeholder',
+  },
+  {
+    id: 4,
+    title: 'Task Tracking App',
+    year: 2025,
+    featured: false,
+    category: 'Frontend',
+    summary: 'Task manager with priority, status updates, and search.',
+    details:
+      'Implemented client-side task operations, search filtering, and compact interaction-driven UI.',
+    stack: ['React', 'CSS', 'JavaScript'],
+    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop',
+    repo: '#repo-placeholder',
+    live: '#live-placeholder',
+  },
+  {
+    id: 5,
+    title: 'Inventory API Service',
+    year: 2026,
+    featured: false,
+    category: 'Backend',
+    summary: 'REST API for inventory modules with validation patterns.',
+    details:
+      'Built structured API routes, request validation, and error response formatting for stable frontend consumption.',
+    stack: ['Node.js', 'Express', 'MongoDB'],
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop',
+    repo: '#repo-placeholder',
+    live: '#live-placeholder',
+  },
+  {
+    id: 6,
+    title: 'Portfolio Generator Prototype',
+    year: 2026,
+    featured: false,
+    category: 'Frontend',
+    summary: 'Template-driven portfolio page builder concept.',
+    details:
+      'Created section configuration flow and dynamic rendering model to produce customizable layouts quickly.',
+    stack: ['React', 'Tailwind', 'Figma'],
+    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop',
+    repo: '#repo-placeholder',
+    live: '#live-placeholder',
+  },
+  {
+    id: 7,
+    title: 'Python Utility Scripts',
+    year: 2025,
+    featured: false,
+    category: 'Python',
+    summary: 'Automation scripts for file handling and data cleanup.',
+    details:
+      'Built small utilities to automate repetitive dev tasks and speed up data preparation workflows.',
+    stack: ['Python'],
+    image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop',
+    repo: '#repo-placeholder',
+    live: '#live-placeholder',
+  },
+]
 
-  // --- Animation Variants ---
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
-  };
+const FILTERS = ['All', 'MERN', 'Frontend', 'Backend', 'Python']
 
-  const cardVariants = {
-    hidden: { y: 40, opacity: 0, scale: 0.95 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      transition: { type: 'spring', stiffness: 120, damping: 15, mass: 1 }
+function PlaceholderLink({ href, label, icon }) {
+  const [clicked, setClicked] = useState(false)
+
+  const onClick = (event) => {
+    if (href.includes('placeholder')) {
+      event.preventDefault()
+      setClicked(true)
     }
-  };
+  }
 
   return (
-    <section className="py-24 px-6 md:px-12 bg-bg min-h-screen">
-      <motion.div
-        className="max-w-7xl mx-auto"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.05 }}
-        variants={containerVariants}
-      >
-        {/* Section Header */}
-        <motion.div variants={cardVariants} className="mb-16 max-w-2xl">
-          <h2 className="font-display text-4xl md:text-5xl text-text-primary font-medium mb-4">
-            Featured Projects
-          </h2>
-          <p className="font-body text-text-secondary text-lg">
-            A selection of my recent work, highlighting full-stack development, system architecture, and scalable design.
-          </p>
-        </motion.div>
-
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <motion.div
-              key={project.id}
-              variants={cardVariants}
-              whileHover={{ y: -8 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="group flex flex-col bg-surface-elevated border border-border rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-accent/20 transition-shadow duration-500"
-            >
-              {/* Image Header */}
-              <div className="relative h-60 overflow-hidden bg-surface border-b border-border">
-                {/* Overlay that clears on hover */}
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1"
-                />
-              </div>
-
-              {/* Card Body */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="font-display text-2xl font-medium text-text-primary mb-3 group-hover:text-accent transition-colors">
-                  {project.title}
-                </h3>
-                <p className="font-body text-text-secondary mb-6 line-clamp-3 flex-grow">
-                  {project.description}
-                </p>
-
-                {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {project.tech.map((tech, index) => (
-                    <motion.span
-                      key={index}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-3 py-1.5 bg-surface text-text-secondary text-xs font-mono rounded-md border border-border/50 cursor-default hover:text-accent hover:border-accent/30 transition-colors"
-                    >
-                      {tech}
-                    </motion.span>
-                  ))}
-                </div>
-
-                {/* Links Footer */}
-                <div className="flex items-center gap-6 mt-auto pt-5 border-t border-border/40">
-                  <motion.a
-                    href={project.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    whileHover={{ x: 4, color: '#8B6F47' }} // Matches your accent color
-                    whileTap={{ scale: 0.95 }}
-                    className="text-text-secondary hover:text-accent transition-colors flex items-center gap-2 font-body text-sm font-medium"
-                  >
-                    <i className="fa-brands fa-github text-lg"></i>
-                    Source
-                  </motion.a>
-                  <motion.a
-                    href={project.live}
-                    target="_blank"
-                    rel="noreferrer"
-                    whileHover={{ x: 4, color: '#8B6F47' }}
-                    whileTap={{ scale: 0.95 }}
-                    className="text-text-secondary hover:text-accent transition-colors flex items-center gap-2 font-body text-sm font-medium"
-                  >
-                    <i className="fa-solid fa-arrow-up-right-from-square text-sm"></i>
-                    Preview
-                  </motion.a>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-    </section>
-  );
+    <div className="flex flex-col">
+      <a href={href} onClick={onClick} className="project-link w-fit" target="_blank" rel="noreferrer">
+        <i className={icon} aria-hidden="true" />
+        <span>{label}</span>
+      </a>
+      {clicked && <span className="mt-1 text-xs text-text-muted">Replace placeholder with your real link.</span>}
+    </div>
+  )
 }
+
+function ProjectCard({ project, isOpen, onToggle }) {
+  return (
+    <Motion.article
+      layout
+      whileHover={{ y: -3 }}
+      className="project-card group rounded-xl border border-border/70 bg-white p-5"
+    >
+      <div className="relative mb-4 h-44 overflow-hidden rounded-xl">
+        <img
+          src={project.image}
+          alt={`${project.title} preview`}
+          loading="lazy"
+          className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+        <div className="absolute bottom-3 left-3 flex items-center gap-2">
+          <span className="rounded-full bg-white/90 px-3 py-1 text-xs text-text-primary">{project.category}</span>
+          <span className="rounded-full bg-white/90 px-3 py-1 text-xs text-text-primary">{project.year}</span>
+        </div>
+      </div>
+
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="font-display text-3xl leading-tight text-text-primary">{project.title}</h3>
+        <i className="fa-solid fa-sparkles text-accent" aria-hidden="true" />
+      </div>
+
+      <p className="mt-3 text-text-secondary">{project.summary}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {project.stack.map((tech) => (
+          <span key={tech} className="project-tag">{tech}</span>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={onToggle}
+        className="mt-5 inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-text-secondary transition-all hover:border-accent hover:text-accent"
+      >
+        <i className={`fa-solid ${isOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`} aria-hidden="true" />
+        {isOpen ? 'Hide Details' : 'View Details'}
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <Motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <div className="mt-4 border-t border-border pt-4">
+              <p className="text-sm text-text-secondary">{project.details}</p>
+              <div className="mt-4 flex gap-5">
+                <PlaceholderLink href={project.repo} label="Repository" icon="fa-brands fa-github" />
+                <PlaceholderLink href={project.live} label="Live Demo" icon="fa-solid fa-arrow-up-right-from-square" />
+              </div>
+            </div>
+          </Motion.div>
+        )}
+      </AnimatePresence>
+    </Motion.article>
+  )
+}
+
+export default function Projects() {
+  const [mode, setMode] = useState('Featured')
+  const [filter, setFilter] = useState('All')
+  const [query, setQuery] = useState('')
+  const [openProjectId, setOpenProjectId] = useState(null)
+
+  const visibleProjects = useMemo(() => {
+    const base = mode === 'Featured' ? PROJECTS.filter((project) => project.featured) : PROJECTS
+    return base.filter((project) => {
+      const matchesFilter = filter === 'All' || project.category === filter
+      const matchesQuery = `${project.title} ${project.summary} ${project.stack.join(' ')}`
+        .toLowerCase()
+        .includes(query.toLowerCase())
+      return matchesFilter && matchesQuery
+    })
+  }, [filter, mode, query])
+
+  return (
+    <Motion.section
+      id="projects"
+      className="px-6 py-24 md:px-12"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.38 }}
+    >
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="max-w-2xl">
+            <p className="mb-3 text-sm uppercase tracking-[0.2em] text-accent">Projects</p>
+            <h2 className="font-display text-4xl text-text-primary md:text-5xl">Selected Work With Strong Implementation Depth</h2>
+            <p className="mt-4 text-text-secondary">
+              Explore featured projects, switch categories, search fast, and open implementation details directly inside each card.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setMode('Featured')}
+              className={`filter-chip ${mode === 'Featured' ? 'filter-chip-active' : ''}`}
+            >
+              <i className="fa-solid fa-star mr-2" aria-hidden="true" />
+              Featured (3)
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('All')}
+              className={`filter-chip ${mode === 'All' ? 'filter-chip-active' : ''}`}
+            >
+              <i className="fa-solid fa-folder-open mr-2" aria-hidden="true" />
+              All Projects (7)
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
+          <div className="relative">
+            <i className="fa-solid fa-magnifying-glass pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
+            <input
+              type="text"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search by project name, stack, or keyword"
+              className="w-full rounded-xl border border-border bg-white py-3 pl-11 pr-4 outline-none transition-colors focus:border-accent"
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {FILTERS.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setFilter(item)}
+                className={`filter-chip filter-chip-sm ${filter === item ? 'filter-chip-active' : ''}`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <p className="mt-4 text-sm text-text-muted">{visibleProjects.length} project(s) shown</p>
+
+        <Motion.div layout className="mt-8 grid gap-6 md:grid-cols-2">
+          {visibleProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              isOpen={openProjectId === project.id}
+              onToggle={() => setOpenProjectId((prev) => (prev === project.id ? null : project.id))}
+            />
+          ))}
+        </Motion.div>
+
+        {visibleProjects.length === 0 && (
+          <div className="mt-8 rounded-xl border border-border bg-white p-6 text-text-secondary">
+            No projects match this filter. Try another category or search term.
+          </div>
+        )}
+      </div>
+    </Motion.section>
+  )
+}
+

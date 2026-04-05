@@ -1,92 +1,54 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import DeveloperHero3D from '../components/DeveloperScene';
+import { Canvas } from '@react-three/fiber'
+import DeveloperHero3D from '../components/DeveloperScene'
+
+const TECH_BADGES = ['MERN', 'Redis', 'BullMQ', 'REST API', 'Docker', 'VM']
 
 export default function Hero() {
-
-  // --- Animation Variants ---
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { 
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: 'spring', stiffness: 100, damping: 15 },
-    },
-  };
-
-  const textContainerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1, 
-        delayChildren: 0.4, // Delay after navbar fades in
-      },
-    },
-  };
-
   return (
-    <motion.section
-      className='min-h-screen grid grid-cols-1 md:grid-cols-2 items-center px-6 md:px-12 gap-10'
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {/* Left Column: Text Content */}
-      <motion.div className="max-w-xl" variants={textContainerVariants}>
-        <motion.p className='font-body text-accent mb-4' variants={itemVariants}>
-          Sachin - Full Stack Dev @ Dromolys
-        </motion.p>
-        <motion.h1 className='font-display text-5xl lg:text-6xl font-medium text-text-primary leading-tight' variants={itemVariants}>
-          I build and maintain robust backend systems and infrastructure.
-        </motion.h1>
-        <motion.div className="mt-6 text-text-secondary font-body text-lg" variants={itemVariants}>
-          Working with Docker, CI/CD pipelines, and modern full-stack tools to ship and maintain scalable, real-world applications.
-        </motion.div>
-        <div className="mt-8 flex items-center gap-4">
-          <motion.button
-            className="bg-accent text-text-inverse font-body px-6 py-3 rounded"
-            variants={itemVariants}
-            whileHover={{ scale: 1.05, backgroundColor: '#7A5F3D' /* accent-hover */ }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-          >
-            Projects
-          </motion.button>
-          <motion.button
-            className="bg-surface-elevated text-text-primary font-body px-6 py-3 rounded border border-border"
-            variants={itemVariants}
-            whileHover={{ scale: 1.05, borderColor: '#5C5C5C' /* text-secondary */ }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-          >
-            Resume
-          </motion.button>
+    <section id="top" className="relative overflow-hidden px-6 md:px-12">
+      <div className="mx-auto grid h-[calc(100vh-76px)] max-w-6xl items-center gap-8 md:grid-cols-2">
+        <div className="max-w-2xl">
+          <p className="hero-kicker">
+            <i className="fa-solid fa-code-branch mr-2" aria-hidden="true" />
+            Full Stack Developer Trainee at Dromolys
+          </p>
+
+          <h1 className="font-display text-4xl leading-tight text-text-primary md:text-6xl">
+            Building Practical Products Across Frontend, Backend, and Infrastructure.
+          </h1>
+
+          <p className="mt-4 text-base leading-relaxed text-text-secondary md:text-lg">
+            Internship at Luminar Technolab (June 2025), now building production-focused features with MERN, Redis, BullMQ, Docker, and VM workflows.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {TECH_BADGES.map((tag) => (
+              <span key={tag} className="tech-chip">{tag}</span>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href="#projects" className="btn-primary">
+              <i className="fa-solid fa-layer-group mr-2" aria-hidden="true" />
+              View Projects
+            </a>
+            <button type="button" className="btn-secondary" title="Add resume link later">
+              <i className="fa-solid fa-file-lines mr-2" aria-hidden="true" />
+              Resume (Coming Soon)
+            </button>
+            <a href="#contact" className="btn-secondary">
+              <i className="fa-regular fa-message mr-2" aria-hidden="true" />
+              Contact
+            </a>
+          </div>
         </div>
-      </motion.div>
-      {/* Right Column: 3D System Orbit */}
-<motion.div className="relative h-[550px] w-full hidden md:flex items-center justify-center" variants={itemVariants}>
-        <div className="absolute inset-0 w-full h-full cursor-default">
-          <Canvas
-            camera={{ position: [0, 1.5, 4.5], fov: 45 }}
-            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-            dpr={[1, 2]}
-          >
+
+        <div className="hero-canvas-wrap hidden md:block">
+          <Canvas camera={{ position: [0, 0, 4.8], fov: 45 }} dpr={[1, 2]}>
             <DeveloperHero3D />
           </Canvas>
         </div>
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   )
 }
