@@ -1,108 +1,64 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion as Motion } from 'framer-motion'
+import giftyImage from '../assets/gifty.webp'
+import pulseImage from '../assets/pulse.webp'
+import zenkaiImage from '../assets/zenkai.webp'
 
 const PROJECTS = [
   {
     id: 1,
-    title: 'Job Portal Platform',
+    title: 'Gifty',
     year: 2026,
     featured: true,
-    category: 'MERN',
-    summary: 'Role-based job portal with recruiter and candidate workflows.',
+    category: 'FinTech',
+    summary: 'Gift card purchase platform with Bitcoin + Stripe payment flows, secure auth, and structured order tracking.',
     details:
-      'Implemented authentication flow, profile management, and filtered job listings with pagination.',
-    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind'],
-    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop',
-    repo: '#repo-placeholder',
-    live: '#live-placeholder',
+      'Built a complete checkout and transaction workflow so users can buy gift cards with modern payment options while keeping account and order data consistent.',
+    scope: 'MERN architecture, authentication, Stripe integration, Bitcoin purchase flow, and database management.',
+    engagement: 'End-to-end product implementation',
+    outcome: 'Solves payment flexibility for digital gift card buyers and gives admins clear transaction visibility.',
+    stack: ['MERN', 'Redis', 'Stripe', 'Bitcoin API', 'JWT'],
+    image: giftyImage,
+    repo: 'https://github.com/SachinRamasamy-cloud/gifty',
+    live: 'https://sachinramasamy-cloud.github.io/gifty/',
   },
   {
     id: 2,
-    title: 'Learning Management UI',
+    title: 'Pulse',
     year: 2026,
     featured: true,
-    category: 'Frontend',
-    summary: 'Dashboard-style learning interface with progress tracking.',
+    category: 'Infrastructure',
+    summary: 'Server maintenance and monitoring platform to register servers, inspect details, and manage operations securely.',
     details:
-      'Built reusable components, responsive layout system, and state-based learning progress cards.',
-    stack: ['React', 'JavaScript', 'Tailwind', 'MUI'],
-    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200&auto=format&fit=crop',
-    repo: '#repo-placeholder',
-    live: '#live-placeholder',
+      'Designed secure data handling with salting and peppering strategies, role-based operations, and reliable storage patterns for sensitive infrastructure metadata.',
+    scope: 'MERN + Redis backend structure, secure credential processing, server management modules, and operational dashboard.',
+    engagement: 'Security-focused full stack build',
+    outcome: 'Solves fragmented server tracking by centralizing management and improving data safety for operational teams.',
+    stack: ['MERN', 'Redis', 'Security Hardening', 'REST API'],
+    image: pulseImage,
+    repo: 'https://github.com/SachinRamasamy-cloud/Pulse',
+    live: 'https://pulse-beta-plum.vercel.app/',
   },
   {
     id: 3,
-    title: 'E-Commerce Storefront',
+    title: 'Zenkai',
     year: 2025,
     featured: true,
-    category: 'MERN',
-    summary: 'Product browsing and cart flow with clean user journeys.',
+    category: 'Media',
+    summary: 'Anime and manga discovery platform with advanced search, optimized browsing, and polished animated UI.',
     details:
-      'Created product listing UI, category filters, cart state handling, and checkout page interactions.',
-    stack: ['React', 'Node.js', 'MongoDB', 'Bootstrap'],
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=1200&auto=format&fit=crop',
-    repo: '#repo-placeholder',
-    live: '#live-placeholder',
-  },
-  {
-    id: 4,
-    title: 'Task Tracking App',
-    year: 2025,
-    featured: false,
-    category: 'Frontend',
-    summary: 'Task manager with priority, status updates, and search.',
-    details:
-      'Implemented client-side task operations, search filtering, and compact interaction-driven UI.',
-    stack: ['React', 'CSS', 'JavaScript'],
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop',
-    repo: '#repo-placeholder',
-    live: '#live-placeholder',
-  },
-  {
-    id: 5,
-    title: 'Inventory API Service',
-    year: 2026,
-    featured: false,
-    category: 'Backend',
-    summary: 'REST API for inventory modules with validation patterns.',
-    details:
-      'Built structured API routes, request validation, and error response formatting for stable frontend consumption.',
-    stack: ['Node.js', 'Express', 'MongoDB'],
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop',
-    repo: '#repo-placeholder',
-    live: '#live-placeholder',
-  },
-  {
-    id: 6,
-    title: 'Portfolio Generator Prototype',
-    year: 2026,
-    featured: false,
-    category: 'Frontend',
-    summary: 'Template-driven portfolio page builder concept.',
-    details:
-      'Created section configuration flow and dynamic rendering model to produce customizable layouts quickly.',
-    stack: ['React', 'Tailwind', 'Figma'],
-    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop',
-    repo: '#repo-placeholder',
-    live: '#live-placeholder',
-  },
-  {
-    id: 7,
-    title: 'Python Utility Scripts',
-    year: 2025,
-    featured: false,
-    category: 'Python',
-    summary: 'Automation scripts for file handling and data cleanup.',
-    details:
-      'Built small utilities to automate repetitive dev tasks and speed up data preparation workflows.',
-    stack: ['Python'],
-    image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop',
-    repo: '#repo-placeholder',
-    live: '#live-placeholder',
+      'Implemented rich filtering and request rate limiting to keep results fast and stable even during high user activity.',
+    scope: 'MERN + Redis architecture, search optimization, rate limiting, and responsive motion-driven interface.',
+    engagement: 'Performance-first full stack build',
+    outcome: 'Solves content discovery friction with fast, focused search and protects APIs through controlled request flow.',
+    stack: ['MERN', 'Redis', 'Rate Limiting', 'Framer Motion'],
+    image: zenkaiImage,
+    repo: 'https://github.com/SachinRamasamy-cloud/zenkai',
+    live: 'https://sachinramasamy-cloud.github.io/zenkai/',
   },
 ]
 
-const FILTERS = ['All', 'MERN', 'Frontend', 'Backend', 'Python']
+const FILTERS = ['All', 'FinTech', 'Infrastructure', 'Media']
 
 function PlaceholderLink({ href, label, icon }) {
   const [clicked, setClicked] = useState(false)
@@ -132,14 +88,21 @@ function ProjectCard({ project, isOpen, onToggle }) {
       whileHover={{ y: -3 }}
       className="project-card group rounded-xl border border-border/70 bg-white p-5"
     >
-      <div className="relative mb-4 h-44 overflow-hidden rounded-xl">
+      <div className="relative mb-4 h-44 overflow-hidden rounded-xl transition-all duration-500 group-hover:h-72">
         <img
           src={project.image}
           alt={`${project.title} preview`}
           loading="lazy"
-          className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+          className="h-full w-full cursor-zoom-in object-cover transition duration-700 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+        <button
+          type="button"
+          className="absolute right-3 top-3 hidden translate-y-1 items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-text-primary opacity-0 shadow-sm transition-all duration-300 hover:bg-white group-hover:translate-y-0 group-hover:opacity-100 lg:inline-flex"
+        >
+          <i className="fa-solid fa-circle-info" aria-hidden="true" />
+          View Details
+        </button>
         <div className="absolute bottom-3 left-3 flex items-center gap-2">
           <span className="rounded-full bg-white/90 px-3 py-1 text-xs text-text-primary">{project.category}</span>
           <span className="rounded-full bg-white/90 px-3 py-1 text-xs text-text-primary">{project.year}</span>
@@ -161,11 +124,26 @@ function ProjectCard({ project, isOpen, onToggle }) {
       <button
         type="button"
         onClick={onToggle}
-        className="mt-5 inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-text-secondary transition-all hover:border-accent hover:text-accent"
+        className="mt-5 inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-text-secondary transition-all hover:border-accent hover:text-accent lg:hidden"
       >
         <i className={`fa-solid ${isOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`} aria-hidden="true" />
         {isOpen ? 'Hide Details' : 'View Details'}
       </button>
+
+      <div className="hidden max-h-0 overflow-hidden opacity-0 transition-all duration-300 group-hover:mt-4 group-hover:max-h-[420px] group-hover:opacity-100 lg:block">
+        <div className="border-t border-border pt-4">
+          <p className="text-sm text-text-secondary">{project.details}</p>
+          <div className="mt-3 grid gap-2 text-sm text-text-secondary">
+            <p><strong className="text-text-primary">Scope:</strong> {project.scope}</p>
+            <p><strong className="text-text-primary">Engagement:</strong> {project.engagement}</p>
+            <p><strong className="text-text-primary">Outcome:</strong> {project.outcome}</p>
+          </div>
+          <div className="mt-4 flex gap-5">
+            <PlaceholderLink href={project.repo} label="Repository" icon="fa-brands fa-github" />
+            <PlaceholderLink href={project.live} label="Live Demo" icon="fa-solid fa-arrow-up-right-from-square" />
+          </div>
+        </div>
+      </div>
 
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -174,10 +152,15 @@ function ProjectCard({ project, isOpen, onToggle }) {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="overflow-hidden"
+            className="overflow-hidden lg:hidden"
           >
             <div className="mt-4 border-t border-border pt-4">
               <p className="text-sm text-text-secondary">{project.details}</p>
+              <div className="mt-3 grid gap-2 text-sm text-text-secondary">
+                <p><strong className="text-text-primary">Scope:</strong> {project.scope}</p>
+                <p><strong className="text-text-primary">Engagement:</strong> {project.engagement}</p>
+                <p><strong className="text-text-primary">Outcome:</strong> {project.outcome}</p>
+              </div>
               <div className="mt-4 flex gap-5">
                 <PlaceholderLink href={project.repo} label="Repository" icon="fa-brands fa-github" />
                 <PlaceholderLink href={project.live} label="Live Demo" icon="fa-solid fa-arrow-up-right-from-square" />
@@ -200,12 +183,14 @@ export default function Projects() {
     const base = mode === 'Featured' ? PROJECTS.filter((project) => project.featured) : PROJECTS
     return base.filter((project) => {
       const matchesFilter = filter === 'All' || project.category === filter
-      const matchesQuery = `${project.title} ${project.summary} ${project.stack.join(' ')}`
+      const matchesQuery = `${project.title} ${project.summary} ${project.scope} ${project.stack.join(' ')}`
         .toLowerCase()
         .includes(query.toLowerCase())
       return matchesFilter && matchesQuery
     })
   }, [filter, mode, query])
+
+  const featuredCount = PROJECTS.filter((project) => project.featured).length
 
   return (
     <Motion.section
@@ -222,7 +207,7 @@ export default function Projects() {
             <p className="mb-3 text-sm uppercase tracking-[0.2em] text-accent">Projects</p>
             <h2 className="font-display text-4xl text-text-primary md:text-5xl">Selected Work With Strong Implementation Depth</h2>
             <p className="mt-4 text-text-secondary">
-              Explore featured projects, switch categories, search fast, and open implementation details directly inside each card.
+              Each project includes scope, engagement model, and outcome details for freelance clients.
             </p>
           </div>
 
@@ -233,7 +218,7 @@ export default function Projects() {
               className={`filter-chip ${mode === 'Featured' ? 'filter-chip-active' : ''}`}
             >
               <i className="fa-solid fa-star mr-2" aria-hidden="true" />
-              Featured (3)
+              Featured ({featuredCount})
             </button>
             <button
               type="button"
@@ -241,7 +226,7 @@ export default function Projects() {
               className={`filter-chip ${mode === 'All' ? 'filter-chip-active' : ''}`}
             >
               <i className="fa-solid fa-folder-open mr-2" aria-hidden="true" />
-              All Projects (7)
+              All Projects ({PROJECTS.length})
             </button>
           </div>
         </div>
@@ -294,4 +279,3 @@ export default function Projects() {
     </Motion.section>
   )
 }
-

@@ -4,9 +4,11 @@ import { motion as Motion } from 'framer-motion'
 const LINKS = [
   { label: 'Home', href: '#top', section: 'top' },
   { label: 'Projects', href: '#projects', section: 'projects' },
+  { label: 'Services', href: '#services', section: 'services' },
   { label: 'Experience', href: '#experience', section: 'experience' },
   { label: 'Skills', href: '#skills', section: 'skills' },
   { label: 'About', href: '#about', section: 'about' },
+  { label: 'Testimonials', href: '#testimonials', section: 'testimonials' },
   { label: 'Contact', href: '#contact', section: 'contact' },
 ]
 
@@ -107,4 +109,3 @@ export default function Navbar() {
     </header>
   )
 }
-
